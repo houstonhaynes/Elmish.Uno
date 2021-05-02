@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Elmish.Uno;
-
 using Microsoft.FSharp.Collections;
 using Microsoft.FSharp.Core;
 
@@ -109,9 +107,14 @@ namespace Elmish.Uno
         public override ViewModelBase<TSubModel, TSubMsg> Create<TSubModel, TSubMsg>(TSubModel initialModel, FSharpFunc<TSubMsg, Unit> dispatch, FSharpList<Binding<TSubModel, TSubMsg>> bindings, ElmConfig config, string propNameChain)
          => new ViewModel<TSubModel, TSubMsg>(initialModel, dispatch, bindings, config, propNameChain);
 
-        public override ObservableCollection<a> CreateCollection<a>(FSharpFunc<Unit, bool> hasMoreItems, FSharpFunc<Tuple<uint, TaskCompletionSource<uint>>, TMsg> loadMoreitems, System.Collections.Generic.IEnumerable<a> collection)
+        public override ObservableCollection<T> CreateCollection<T>(FSharpFunc<Unit, bool> hasMoreItems, FSharpFunc<Tuple<uint, TaskCompletionSource<uint>>, TMsg> loadMoreitems, System.Collections.Generic.IEnumerable<T> collection)
         {
-            throw new NotImplementedException();
+            void LoadMoreitems(uint count, TaskCompletionSource<uint> tcs)
+            {
+                var msg = loadMoreitems.Invoke(new Tuple<uint, TaskCompletionSource<uint>>(count, tcs));
+                Dispatch.Invoke(msg);
+            }
+            return new IncrementalLoadingCollection<T>(collection, () => hasMoreItems.Invoke(null), LoadMoreitems);
         }
 
 
