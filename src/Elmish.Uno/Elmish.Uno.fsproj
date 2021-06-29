@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net6.0;net6.0-windows10.0.22000.0</TargetFrameworks>
+    <TargetPlatformMinVersion Condition="$(TargetFramework.StartsWith('net6.0-windows10'))">10.0.17763.0</TargetPlatformMinVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -29,14 +30,15 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows10'))">
+    <DefineConstants>$(DefineConstants);__UWP__</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="elmish-uno-logo-128x128.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Elmish.Uno.Mobile</_Parameter1>
-    </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Elmish.Uno.Tests</_Parameter1>
     </AssemblyAttribute>
@@ -45,18 +47,33 @@
     <Compile Include="Config.fs" />
     <Compile Include="Binding.fs" />
     <Compile Include="Utils.fs" />
+    <Compile Include="DynamicCustomProperty.fs" />
     <Compile Include="ViewModel.fs" />
+    <Compile Include="ViewModelModule.fs" />
     <Compile Include="Program.fs" />
     <Compile Include="Navigation.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Elmish" Version="3.1.0" />
+    <PackageReference Include="Elmish" Version="[3.0.3, 4)" />
     <PackageReference Include="FSharp.Collections.Immutable" Version="2.0.0-*" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.*" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+    <!--<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.*" GeneratePathProperty="true" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />-->
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.196" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+    <PackageReference Include="Uno.Core" Version="3.0.*" />
+    <PackageReference Include="Uno.WinUI" Version="3.11.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="5.0.*" />
+    <PackageReference Update="FSharp.Core" Version="6.0.*" />
   </ItemGroup>
+
+  <Target Name="XamlPreCompile" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+
+  <!--<Target Name="FixReferenceCopyLocalPaths" BeforeTargets="ResolvePackageAssets" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="$(PkgMicrosoft_WindowsAppSDK)\build\..\runtimes\lib\native\AnyCPU\Microsoft.WindowsAppRuntime.Bootstrap.dll"/>
+    </ItemGroup>
+  </Target>-->
 
 </Project>

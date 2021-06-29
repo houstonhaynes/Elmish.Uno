@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,18 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Elmish.Uno.Samples.WPF.Host
+namespace Samples.WPF.Host
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            root.Content = new global::Uno.UI.Skia.Platform.WpfHost(Dispatcher, () => new Samples.App());
-        }
-    }
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{
+		public MainWindow()
+		{
+			InitializeComponent();
+	
+			root.Content = new global::Uno.UI.Skia.Platform.WpfHost(Dispatcher, () => new Samples.App());
+		}
+	}
 }
