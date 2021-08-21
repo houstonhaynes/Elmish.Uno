@@ -4,6 +4,7 @@ open System
 open System.Collections.Generic
 open System.Collections.ObjectModel
 open System.ComponentModel
+open System.Diagnostics
 open System.Dynamic
 open System.Reflection
 open Microsoft.FSharp.Reflection
@@ -178,25 +179,32 @@ and [<AllowNullLiteral>] internal ViewModel<'model, 'msg>
   let getPropChainForItem collectionBindingName itemId =
     sprintf "%s.%s.%s" propNameChain collectionBindingName itemId
 
-  let notifyPropertyChanged propName =
-    log "[%s] PropertyChanged \"%s\"" propNameChain propName
-    propertyChanged.Trigger(this, PropertyChangedEventArgs propName)
-
   let raiseCanExecuteChanged (cmd: Command) =
     cmd.RaiseCanExecuteChanged ()
+
+  let notifyPropertyChanged propName =
+    log "[%s] PropertyChanged \"%s\"" propNameChain propName
+    try
+      propertyChanged.Trigger(this, PropertyChangedEventArgs propName)
+    with _ ->
+      Debugger.Break()
+
+  let notifyErrorsChanged propName =
+    log "[%s] ErrorsChanged \"%s\"" propNameChain propName
+    try
+      errorsChanged.Trigger([| box this; box <| DataErrorsChangedEventArgs propName |])
+    with _ ->
+      Debugger.Break()
 
   let setError propErrors propName =
     match errors.TryGetValue propName with
     | true, _ -> ()
     | _ ->
-       log "[%s] ErrorsChanged \"%s\"" propNameChain propName
-       errors.[propName] <- propErrors
-       errorsChanged.Trigger([| box this; box <| DataErrorsChangedEventArgs propName |])
+      errors.[propName] <- propErrors
+      notifyErrorsChanged propName
 
   let removeError propName =
-    if errors.Remove propName then
-      log "[%s] ErrorsChanged \"%s\"" propNameChain propName
-      errorsChanged.Trigger([| box this; box <| DataErrorsChangedEventArgs propName |])
+    if errors.Remove propName then notifyErrorsChanged propName
 
   let rec updateValidationError model name = function
     | TwoWayValidate { Validate = validate; Errors = errors; GetErrorId = getErrorId; ErrorItemEquals = errorItemEquals } ->
