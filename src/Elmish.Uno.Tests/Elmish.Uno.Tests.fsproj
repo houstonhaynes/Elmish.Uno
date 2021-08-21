@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+  <Import Project="..\Solution.Build.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
+    <RootNamespace>$(RootNamespace).Tests</RootNamespace>
+    <AssemblyName>$(AssemblyBaseName).Tests</AssemblyName>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
     <GenerateProgramFile>false</GenerateProgramFile>
@@ -26,10 +25,10 @@
     <PackageReference Include="FSharp.Interop.Dynamic" Version="5.0.1.268" />
     <PackageReference Include="Hedgehog" Version="0.8.3" />
     <PackageReference Include="Hedgehog.Experimental" Version="0.1.5" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.*" />
-    <PackageReference Include="Unquote" Version="5.0.0" />
-    <PackageReference Include="xunit.core" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.*" />
+    <PackageReference Include="Unquote" Version="6.1.*" />
+    <PackageReference Include="xunit.core" Version="2.4.*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -40,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="5.0.*" />
+    <PackageReference Update="FSharp.Core" Version="$(FSharpCoreVersion)" />
   </ItemGroup>
 
 </Project>
