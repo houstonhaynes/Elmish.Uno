@@ -9,32 +9,54 @@ open Elmish.Uno
 type Model =
   { OneWaySeqNumbers: int list
     OneWayNumbers: int list
-    IncrementalLoadingNumbers: int FlatList }
+    IncrementalLoadingNumbers: int FlatList
+    IsLoading: bool }
 
 let initial =
   { OneWaySeqNumbers = [ 1000..-1..1 ]
     OneWayNumbers = [ 1000..-1..1 ]
-    IncrementalLoadingNumbers = [ 1..1..10 ] |> FlatList.ofSeq }
+    IncrementalLoadingNumbers = [ 1..1..10 ] |> FlatList.ofSeq
+    IsLoading = false }
 
-let init () = initial
+let init () = initial, Cmd.none
 
 type Msg =
   | AddOneWaySeqNumber
   | AddOneWayNumber
   | LoadMore of count: uint * tcs: TaskCompletionSource<uint>
+  | LoadedMore of allItems: FlatList<int>
+  | ErrorLoadingMore
+
+let asyncLoadItems (tcs: uint TaskCompletionSource) (items: FlatList<int>) count = async {
+  try
+    let intCount = int count
+    let builder = items.ToBuilder()
+    let max = FlatList.last items
+    for i = max + 1 to max + intCount do
+      builder.Add(i)
+    // Must be called to complete Task and unblock UI to update
+    // Otherwise it will block loading async operaiton and it will never be called again
+    tcs.SetResult(count)
+    return LoadedMore <| builder.ToImmutable ()
+  with ex ->
+    // Must be called to complete Task and unblock UI to update
+    // Otherwise it will block loading async operaiton and it will never be called again
+    tcs.SetException ex
+    return ErrorLoadingMore
+ }
 
 let update msg m =
   match msg with
-  | AddOneWaySeqNumber -> { m with OneWaySeqNumbers = m.OneWaySeqNumbers.Head + 1 :: m.OneWaySeqNumbers }
-  | AddOneWayNumber -> { m with OneWayNumbers = m.OneWayNumbers.Head + 1 :: m.OneWayNumbers }
+  | AddOneWaySeqNumber -> { m with OneWaySeqNumbers = m.OneWaySeqNumbers.Head + 1 :: m.OneWaySeqNumbers }, Cmd.none
+  | AddOneWayNumber -> { m with OneWayNumbers = m.OneWayNumbers.Head + 1 :: m.OneWayNumbers }, Cmd.none
   | LoadMore (count, tcs) ->
-    let intCount = int count
-    let builder = m.IncrementalLoadingNumbers.ToBuilder()
-    let max = FlatList.last m.IncrementalLoadingNumbers
-    for i = max + 1 to max + intCount do
-      builder.Add(i)
-    tcs.SetResult(count)
-    { m with IncrementalLoadingNumbers = builder.ToImmutable() }
+                        // If error hapened earlier it may be worth to do someting with that instead
+                        { m with IsLoading = true }, // Display some hint (indetermined progress bar)
+                        asyncLoadItems tcs m.IncrementalLoadingNumbers count |> Cmd.OfAsync.result
+  | LoadedMore items -> { m with
+                            IsLoading = false // Hide loading indicator
+                            IncrementalLoadingNumbers = items }, Cmd.none
+  | ErrorLoadingMore -> m, Cmd.none // add error to model that will appear on IU
 
 let bindings : Binding<Model, Msg> list = [
   "OneWaySeqNumbers" |> Binding.oneWaySeq ((fun m -> m.OneWaySeqNumbers), (=), id)
@@ -49,7 +71,7 @@ let designModel = initial
 
 [<CompiledName("Program")>]
 let program =
-  Program.mkSimpleUno init update bindings
+  Program.mkProgramUno init update bindings
   |> Program.withConsoleTrace
 
 [<CompiledName("Config")>]
