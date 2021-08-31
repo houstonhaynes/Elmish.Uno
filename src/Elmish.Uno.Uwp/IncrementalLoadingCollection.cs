@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
+using Microsoft.FSharp.Core;
+
 using Windows.Foundation;
 using Windows.UI.Xaml.Data;
 
@@ -12,21 +14,21 @@ namespace Elmish.Uno
     {
 
         private readonly Func<bool> hasMoreItems;
-        private readonly Action<uint, TaskCompletionSource<uint>> loadMoreItems;
+        private readonly Action<uint, FSharpFunc<uint, Unit>> loadMoreItems;
 
-        public IncrementalLoadingCollection(Func<bool> hasMoreItems, Action<uint, TaskCompletionSource<uint>> loadMoreItems)
+        public IncrementalLoadingCollection(Func<bool> hasMoreItems, Action<uint, FSharpFunc<uint, Unit>> loadMoreItems)
         {
             this.hasMoreItems = hasMoreItems;
             this.loadMoreItems = loadMoreItems;
         }
 
-        public IncrementalLoadingCollection(IEnumerable<T> collection, Func<bool> hasMoreItems, Action<uint, TaskCompletionSource<uint>> loadMoreItems) : base(collection)
+        public IncrementalLoadingCollection(IEnumerable<T> collection, Func<bool> hasMoreItems, Action<uint, FSharpFunc<uint, Unit>> loadMoreItems) : base(collection)
         {
             this.hasMoreItems = hasMoreItems;
             this.loadMoreItems = loadMoreItems;
         }
 
-        public IncrementalLoadingCollection(List<T> list, Func<bool> hasMoreItems, Action<uint, TaskCompletionSource<uint>> loadMoreItems) : base(list)
+        public IncrementalLoadingCollection(List<T> list, Func<bool> hasMoreItems, Action<uint, FSharpFunc<uint, Unit>> loadMoreItems) : base(list)
         {
             this.hasMoreItems = hasMoreItems;
             this.loadMoreItems = loadMoreItems;
@@ -39,7 +41,7 @@ namespace Elmish.Uno
             async Task<LoadMoreItemsResult> LoadMoreItemsAsync ()
             {
                 var tcs = new TaskCompletionSource<uint>();
-                loadMoreItems(count, tcs);
+                loadMoreItems(count, FuncConvert.FromAction<uint>(c => tcs.SetResult(c)));
                 var actualCount = await tcs.Task;
                 return new LoadMoreItemsResult { Count = actualCount };
             }

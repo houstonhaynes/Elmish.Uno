@@ -9,7 +9,7 @@ type IncrementalLoadingCollection<'t> =
   inherit ObservableCollection<'t>
 
   val has: unit -> bool
-  val load: uint * TaskCompletionSource<uint> -> unit
+  val load: uint * (uint -> unit) -> unit
 
   new (hasMoreItems, loadMoreItems) =
     { inherit ObservableCollection<'t>();
@@ -32,8 +32,28 @@ type IncrementalLoadingCollection<'t> =
 
     member this.LoadMoreItemsAsync (count) =
       let tcs = TaskCompletionSource<uint>()
-      this.load (count, tcs)
+      this.load (count, fun count -> tcs.SetResult(count))
       let mapToResult (actualCountTask: Task<uint>) =
         LoadMoreItemsResult(Count = actualCountTask.Result)
       tcs.Task.ContinueWith(mapToResult, TaskContinuationOptions.OnlyOnRanToCompletion).AsAsyncOperation()
+
+      //(async {
+      //  let tcs = TaskCompletionSource<uint>()
+      //  let count =
+      //    try
+      //      let! count = this.load (count, fun count -> tcs.SetResult(count))
+      //      count
+      //    with
+      //    | :? Exception as ex ->
+      //      tcs.SetException(ex)
+      //      ex.Reraise ()
+      //  let mapToResult (actualCountTask: Task<uint>) =
+      //    LoadMoreItemsResult(Count = actualCountTask.Result)
+      //  tcs.Task.ContinueWith(mapToResult, TaskContinuationOptions.OnlyOnRanToCompletion).AsAsyncOperation()
+      //  let! count = load count
+      //  this.load (count, tcs)
+      //  let complete (actualCount: uint) = async {
+      //    return LoadMoreItemsResult(Count = actualCountTask.Result)
+      //  }
+      //} |> Async.StartAsTask()).ContinueWith(mapToResult, TaskContinuationOptions.OnlyOnRanToCompletion).AsAsyncOperation()
 

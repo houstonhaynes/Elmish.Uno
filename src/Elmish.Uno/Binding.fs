@@ -7,7 +7,7 @@ open Elmish
 open System.Threading.Tasks
 
 type internal HasMoreItems<'model> = 'model -> bool
-type internal LoadMoreItems<'msg> = uint * TaskCompletionSource<uint> -> 'msg
+type internal LoadMoreItems<'msg> = uint * (uint -> unit) -> 'msg
 [<Struct>]
 type internal IncrementalLoadingData<'model,'msg> =
   | Static

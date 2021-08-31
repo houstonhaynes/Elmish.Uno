@@ -107,11 +107,11 @@ namespace Elmish.Uno
         public override ViewModelBase<TSubModel, TSubMsg> Create<TSubModel, TSubMsg>(TSubModel initialModel, FSharpFunc<TSubMsg, Unit> dispatch, FSharpList<Binding<TSubModel, TSubMsg>> bindings, ElmConfig config, string propNameChain)
          => new ViewModel<TSubModel, TSubMsg>(initialModel, dispatch, bindings, config, propNameChain);
 
-        public override ObservableCollection<T> CreateCollection<T>(FSharpFunc<TModel, bool> hasMoreItems, FSharpFunc<Tuple<uint, TaskCompletionSource<uint>>, TMsg> loadMoreitems, System.Collections.Generic.IEnumerable<T> collection)
+        public override ObservableCollection<T> CreateCollection<T>(FSharpFunc<TModel, bool> hasMoreItems, FSharpFunc<Tuple<uint, FSharpFunc<uint, Unit>>, TMsg> loadMoreitems, System.Collections.Generic.IEnumerable<T> collection)
         {
-            void LoadMoreitems(uint count, TaskCompletionSource<uint> tcs)
+            void LoadMoreitems(uint count, FSharpFunc<uint, Unit> complete)
             {
-                var msg = loadMoreitems.Invoke(new Tuple<uint, TaskCompletionSource<uint>>(count, tcs));
+                var msg = loadMoreitems.Invoke(new Tuple<uint, FSharpFunc<uint, Unit>>(count, complete));
                 Dispatch.Invoke(msg);
             }
             return new IncrementalLoadingCollection<T>(collection, () => hasMoreItems.Invoke(this.currentModel), LoadMoreitems);

@@ -4,6 +4,7 @@ open System.Threading.Tasks
 open FSharp.Collections.Immutable
 open Elmish
 open Elmish.Uno
+open System
 
 
 type Model =
@@ -23,36 +24,35 @@ let init () = initial, Cmd.none
 type Msg =
   | AddOneWaySeqNumber
   | AddOneWayNumber
-  | LoadMore of count: uint * tcs: TaskCompletionSource<uint>
+  | LoadMore of count: uint * complete: (uint -> unit)
   | LoadedMore of allItems: FlatList<int>
   | ErrorLoadingMore
 
-let asyncLoadItems (tcs: uint TaskCompletionSource) (items: FlatList<int>) count = async {
+let asyncLoadItems (complete: uint -> unit) (items: FlatList<int>) count = async {
   try
-    let intCount = int count
-    let builder = items.ToBuilder()
-    let max = FlatList.last items
-    for i = max + 1 to max + intCount do
-      builder.Add(i)
+    try
+      let intCount = int count
+      let builder = items.ToBuilder()
+      let max = FlatList.last items
+      for i = max + 1 to max + intCount do
+        builder.Add(i)
+      return LoadedMore <| builder.ToImmutable ()
+    with _ ->
+      return ErrorLoadingMore
+  finally
     // Must be called to complete Task and unblock UI to update
     // Otherwise it will block loading async operaiton and it will never be called again
-    tcs.SetResult(count)
-    return LoadedMore <| builder.ToImmutable ()
-  with ex ->
-    // Must be called to complete Task and unblock UI to update
-    // Otherwise it will block loading async operaiton and it will never be called again
-    tcs.SetException ex
-    return ErrorLoadingMore
+    complete count
  }
 
 let update msg m =
   match msg with
   | AddOneWaySeqNumber -> { m with OneWaySeqNumbers = m.OneWaySeqNumbers.Head + 1 :: m.OneWaySeqNumbers }, Cmd.none
   | AddOneWayNumber -> { m with OneWayNumbers = m.OneWayNumbers.Head + 1 :: m.OneWayNumbers }, Cmd.none
-  | LoadMore (count, tcs) ->
+  | LoadMore (count, complete) ->
                         // If error hapened earlier it may be worth to do someting with that instead
                         { m with IsLoading = true }, // Display some hint (indetermined progress bar)
-                        asyncLoadItems tcs m.IncrementalLoadingNumbers count |> Cmd.OfAsync.result
+                        asyncLoadItems complete m.IncrementalLoadingNumbers count |> Cmd.OfAsync.result
   | LoadedMore items -> { m with
                             IsLoading = false // Hide loading indicator
                             IncrementalLoadingNumbers = items }, Cmd.none
