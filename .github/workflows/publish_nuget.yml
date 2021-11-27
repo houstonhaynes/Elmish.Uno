@@ -45,11 +45,11 @@ jobs:
         set-content 'Elmish.Uno.nuspec' -value $nuspec
         nuget pack 'Elmish.Uno.nuspec' -Properties Configuration=Release
 
-    - name: Pack Templates with NuGet
-      run: |
-        $nuspec = get-content 'src\\Templates\\Templates.nuspec' | %{ $_ -replace '\$versionSuffix\$',""}
-        set-content 'src\\Templates\\Templates.nuspec' -value $nuspec
-        nuget pack 'src\\Templates\\Templates.nuspec' -Properties Configuration=Release -NoDefaultExcludes
+    #- name: Pack Templates with NuGet
+    #  run: |
+    #    $nuspec = get-content 'src\\Templates\\Templates.nuspec' | %{ $_ -replace '\$versionSuffix\$',""}
+    #    set-content 'src\\Templates\\Templates.nuspec' -value $nuspec
+    #    nuget pack 'src\\Templates\\Templates.nuspec' -Properties Configuration=Release -NoDefaultExcludes
 
     - name: Publish to MyGet
       run: |
