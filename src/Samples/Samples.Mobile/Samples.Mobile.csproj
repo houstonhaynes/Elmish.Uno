@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
     <!--<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos</TargetFrameworks>-->
     <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-macos</TargetFrameworks>
+    <RootNamespace>Elmish.Uno.Samples</RootNamespace>
     <SingleProject>true</SingleProject>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-ios'">iossimulator-x64</RuntimeIdentifier>
@@ -15,24 +17,26 @@
     <IsUnoHead>true</IsUnoHead>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI" Version="3.11.*" />
+    <PackageReference Include="Uno.CommunityToolkit.WinUI.UI" Version="7.1.100-dev.*" />
+    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.3.*" />
+    <PackageReference Include="Uno.WinUI" Version="4.1.*" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
-    <!--<PackageReference Include="Xamarin.Google.Android.Material" Version="1.3.0.1-net6preview03.4680155" />-->
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.*" />
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.4.*" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.4.*" />
+    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.7.*" />
+    <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.4.*" />
+    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.*" />
+    <PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.2.*" />
     <PackageReference Include="Uno.UniversalImageLoader" Version="1.9.*" />
-    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.3.1.*" />
-    <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.3.6.*" />
-    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.*" />
-    <PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.2.1.*" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-ios' or '$(TargetFramework)'=='net6.0-maccatalyst'">
-    <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.2.0-dev.*" />
+    <PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.3.0-dev.*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.*" />
+    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.3.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Elmish.Uno\Elmish.Uno.fsproj" />

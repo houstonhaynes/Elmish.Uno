@@ -2,12 +2,15 @@
   <PropertyGroup>
     <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
+    <LangVersion>10.0</LangVersion>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>Elmish.Uno.Samples</RootNamespace>
+    <AssemblyName>Elmish.Uno.Samples.Host</AssemblyName>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="3.11.*" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="3.11.*" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="4.1.*" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.1.*" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />

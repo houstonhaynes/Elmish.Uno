@@ -1,15 +1,14 @@
+﻿namespace Elmish.Uno.Samples;
+
 using AppKit;
 
-namespace Samples.macOS
+public partial class App
 {
-	static class MainClass
-	{
-		static void Main(string[] args)
-		{
-			NSApplication.Init();
-			NSApplication.SharedApplication.Delegate = new App();
-			NSApplication.Main(args);  
-		}
-	}
+    private static void Main(string[] args)
+    {
+        NSApplication.Init();
+        NSApplication.SharedApplication.Delegate = new App();
+        NSApplication.Main(args);
+    }
 }
 

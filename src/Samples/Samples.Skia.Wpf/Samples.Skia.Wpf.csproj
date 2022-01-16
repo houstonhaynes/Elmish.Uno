@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>Elmish.Uno.Samples</RootNamespace>
+    <AssemblyName>Elmish.Uno.Samples</AssemblyName>
+    <UseWPF>false</UseWPF>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.*" />
-    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="3.11.*" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="3.11.*" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.CommunityToolkit.WinUI.UI" Version="7.1.100-dev.*" />
+    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.3.*" />
+    <PackageReference Include="Uno.WinUI.Skia.Wpf" Version="4.1.*" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.1.*" Condition="'$(Configuration)'=='Debug'" />
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Include="..\Samples.Shared\**\*.xaml" />

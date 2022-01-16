@@ -2,6 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Elmish.Uno.Samples</RootNamespace>
+    <AssemblyName>Elmish.Uno.Samples</AssemblyName>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -41,12 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.*" />
+    <PackageReference Include="Uno.CommunityToolkit.WinUI.UI" Version="7.1.100-dev.*" />
     <PackageReference Include="Uno.Extensions.Logging.WebAssembly.Console" Version="1.1.*" />
-    <PackageReference Include="Uno.WinUI.WebAssembly" Version="3.11.*" />
-    <PackageReference Include="Uno.WinUI.RemoteControl" Version="3.11.*" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.Wasm.Bootstrap" Version="3.0.*" />
-    <PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="3.0.*" />
+    <PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.3.*" />
+    <PackageReference Include="Uno.WinUI.WebAssembly" Version="4.1.*" />
+    <PackageReference Include="Uno.WinUI.RemoteControl" Version="4.1.*" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.Wasm.Bootstrap" Version="3.*" />
+    <PackageReference Include="Uno.Wasm.Bootstrap.DevServer" Version="3.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Elmish.Uno\Elmish.Uno.fsproj" />

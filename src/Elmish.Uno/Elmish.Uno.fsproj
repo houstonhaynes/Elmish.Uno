@@ -59,9 +59,9 @@
     <PackageReference Include="FSharp.Collections.Immutable" Version="2.0.0-*" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.*" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
     <!--<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.*" GeneratePathProperty="true" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />-->
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.196" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
-    <PackageReference Include="Uno.Core" Version="3.0.*" />
-    <PackageReference Include="Uno.WinUI" Version="3.11.*" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+    <PackageReference Include="Uno.Core" Version="4.0.*" />
+    <PackageReference Include="Uno.WinUI" Version="4.1.*" Condition="$(TargetFramework.Equals('net6.0'))" />
   </ItemGroup>
 
   <ItemGroup>

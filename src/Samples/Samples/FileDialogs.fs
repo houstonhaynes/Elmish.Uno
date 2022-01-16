@@ -34,13 +34,13 @@ type Msg =
 
 let save text =
   //CoreApplication.GetCurrentView().DispatcherQueue.TryEnqueue(fun () ->
-  //  let guiCtx = SynchronizationContext.Current
+    let picker = new Windows.Storage.Pickers.FileSavePicker()
+    let fileTypeChoices = picker.FileTypeChoices
+    do fileTypeChoices.Add("Plain Text", [|".txt"|])
+    do fileTypeChoices.Add("Markdown"  , [|".md" |])
+    //let guiCtx = SynchronizationContext.Current
     async {
       //do! Async.SwitchToContext guiCtx
-      let picker = new Windows.Storage.Pickers.FileSavePicker()
-      let fileTypeChoices = picker.FileTypeChoices
-      do fileTypeChoices.Add("Plain Text", [|".txt"|])
-      do fileTypeChoices.Add("Markdown"  , [|".md" |])
       let! file = picker.PickSaveFileAsync().AsTask()
       match file with
       | null -> return SaveCanceled
@@ -62,13 +62,13 @@ let save text =
 
 let load () =
   //CoreApplication.GetCurrentView().DispatcherQueue.TryEnqueue(fun () ->
+    let picker = new Windows.Storage.Pickers.FileOpenPicker()
+    let fileTypeFilter = picker.FileTypeFilter
+    do fileTypeFilter.Add(".txt")
+    do fileTypeFilter.Add(".md")
     //let guiCtx = SynchronizationContext.Current
     async {
       //do! Async.SwitchToContext guiCtx
-      let picker = new Windows.Storage.Pickers.FileOpenPicker()
-      let fileTypeFilter = picker.FileTypeFilter
-      do fileTypeFilter.Add(".txt")
-      do fileTypeFilter.Add(".md")
       let! file = picker.PickSingleFileAsync().AsTask()
       match file with
       | null -> return LoadCanceled

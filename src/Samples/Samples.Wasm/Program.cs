@@ -1,17 +1,13 @@
-using System;
-using Microsoft.UI.Xaml;
+﻿namespace Elmish.Uno.Samples;
 
-namespace Samples.Wasm
+public partial class App
 {
-	public class Program
-	{
-		private static App _app;
+    private static App app;
 
-		static int Main(string[] args)
-		{
-			Microsoft.UI.Xaml.Application.Start(_ => _app = new App());
+    private static int Main(string[] args)
+    {
+        Microsoft.UI.Xaml.Application.Start(_ => app = new App());
 
-			return 0;
-		}
-	}
+        return 0;
+    }
 }
