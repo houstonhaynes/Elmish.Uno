@@ -33,12 +33,12 @@ Big thanks to [@MrMattSim](https://github.com/MrMattSim) for the wonderful logo!
 Recommended resources
 ---------------------
 
-* The [Elmish.Uno tutorial](https://github.com/elmish/Elmish.Uno/blob/master/TUTORIAL.md) explains how to use Elmish.Uno, starting with general Elmish/MVU concepts and ending with complex bindings and optimizations.
+* The [Elmish.Uno tutorial](https://github.com/xperiandri/Elmish.Uno/blob/uno/TUTORIAL.md) explains how to use Elmish.Uno, starting with general Elmish/MVU concepts and ending with complex bindings and optimizations.
 * The [Elmish docs site](https://elmish.github.io/elmish) also explains the general MVU architecture and principles.
-* The [Elmish.Uno samples](https://github.com/elmish/Elmish.Uno/tree/master/src/Samples) provide many concrete usage examples.
+* The [Elmish.Uno samples](https://github.com/xperiandri/Elmish.Uno/tree/uno/src/Samples) provide many concrete usage examples.
 * Blog posts:
    * [Getting Elmish in .NET with Elmish.Uno](https://medium.com/swlh/getting-elmish-in-net-with-elmish-wpf-cd44e3eddc27) ("getting started" guide by Matt Eland)
-* Elm resources may also provide some guidance, but note that not everything is relevant. A significant difference between “normal” Elm architecture and Elmish.Uno is that in Elmish.Uno, the views are statically defined using XAML, and the “view” function does not render views, but set up bindings. See the [tutorial](https://github.com/elmish/Elmish.Uno/blob/master/TUTORIAL.md) for details.
+* Elm resources may also provide some guidance, but note that not everything is relevant. A significant difference between “normal” Elm architecture and Elmish.Uno is that in Elmish.Uno, the views are statically defined using XAML, and the “view” function does not render views, but set up bindings. See the [tutorial](https://github.com/xperiandri/Elmish.Uno/blob/uno/TUTORIAL.md) for details.
   * [Official Elm guide](https://guide.elm-lang.org)
   * Two talks: [Summarising Elm scaling strategy](https://dev.to/elmupdate/summarising-elm-scaling-strategy-1bjn)
   * Reddit: [Resources regarding scaling Elm apps](https://www.reddit.com/r/elm/comments/65s0g4/resources_regarding_scaling_elm_apps/)
@@ -48,7 +48,7 @@ Recommended resources
 Getting started with Elmish.Uno
 -------------------------------
 
-See the [SingleCounter](https://github.com/elmish/Elmish.Uno/tree/master/src/Samples) sample for a very simple app. The central points are (assuming up-to-date VS2019):
+See the [SingleCounter](https://github.com/xperiandri/Elmish.Uno/tree/uno/src/Samples) sample for a very simple app. The central points are (assuming up-to-date VS2019):
 
 1. Create an F# Class Library. If targeting .NET 5 or .NET Core, the project file should look like this:
 
@@ -180,9 +180,9 @@ See the [SingleCounter](https://github.com/elmish/Elmish.Uno/tree/master/src/Sam
 
 Further resources:
 
-* The [Elmish.Uno tutorial](https://github.com/elmish/Elmish.Uno/blob/master/TUTORIAL.md) provides information on general MVU/Elmish concepts and how they apply to Elmish.Uno, as well as the various Elmish.Uno bindings.
-* The [samples](https://github.com/elmish/Elmish.Uno/tree/master/src/Samples) are complete, working mini-apps demonstrating selected aspects of Elmish.Uno.
-* If you'd like to contribute, please read and follow the [Contributor guidelines](https://github.com/elmish/Elmish.Uno/blob/master/.github/CONTRIBUTING.md).
+* The [Elmish.Uno tutorial](https://github.com/xperiandri/Elmish.Uno/blob/uno/TUTORIAL.md) provides information on general MVU/Elmish concepts and how they apply to Elmish.Uno, as well as the various Elmish.Uno bindings.
+* The [samples](https://github.com/xperiandri/Elmish.Uno/tree/uno/src/Samples) are complete, working mini-apps demonstrating selected aspects of Elmish.Uno.
+* If you'd like to contribute, please read and follow the [Contributor guidelines](https://github.com/xperiandri/Elmish.Uno/blob/uno/.github/CONTRIBUTING.md).
 
 FAQ
 ---
