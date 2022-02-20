@@ -17,7 +17,6 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E8FAB67C-C113-4E2C-B28C-7BA8EB3559C3}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>$(RootNamespace).Windows</RootNamespace>
     <AssemblyName>$(AssemblyBaseName).Mobile</AssemblyName>
@@ -131,6 +130,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <DocumentationFile>$(OutputPath)\Elmish.Uno.Mobile.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="NavigationService.cs" />
