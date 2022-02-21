@@ -16,23 +16,70 @@ using Windows.UI.Xaml.Data;
 
 namespace Elmish.Windows
 {
+    /// <summary>
+    /// Implementation of dynamic property required by WinRT to do bindings.
+    /// </summary>
+    /// <typeparam name="TTarget">Target object type from which to get and to which to set a property value.</typeparam>
+    /// <typeparam name="TValue">Value type.</typeparam>
     public class DynamicCustomProperty<TTarget, TValue> : ICustomProperty
     {
+        /// <summary>
+        /// Property getter delegate.
+        /// </summary>
         public Func<TTarget, TValue> Getter { get; }
+        /// <summary>
+        /// Property setter delegate
+        /// </summary>
         public Action<TTarget, TValue> Setter { get; }
+        /// <summary>
+        /// Indexer getter delegate
+        /// </summary>
         public Func<TTarget, object, TValue> IndexGetter { get; }
+        /// <summary>
+        /// Indexer setter delegate
+        /// </summary>
         public Action<TTarget, object, TValue> IndexSetter { get; }
 
-        public object GetValue(object target) => Getter.Invoke((TTarget) target);
+        /// <summary>Gets the value of the custom property from a particular instance.</summary>
+        /// <param name="target">The owning instance.</param>
+        /// <returns>The retrieved value.</returns>
+        public object GetValue(object target) => Getter.Invoke((TTarget)target);
+        /// <summary>Sets the custom property value on a specified instance.</summary>
+        /// <param name="target">The owner instance.</param>
+        /// <param name="value">The value to set.</param>
         public void SetValue(object target, object value) => Setter.Invoke((TTarget)target, (TValue)value);
+        /// <summary>Gets the value at an index location, for cases where the custom property has indexer support.</summary>
+        /// <param name="target">The owning instance.</param>
+        /// <param name="index">The index to get.</param>
+        /// <returns>The retrieved value at the index.</returns>
         public object GetIndexedValue(object target, object index) => IndexGetter.Invoke((TTarget)target, index);
+        /// <summary>Sets the value at an index location, for cases where the custom property has indexer support.</summary>
+        /// <param name="target">The owner instance.</param>
+        /// <param name="value">The value to set.</param>
+        /// <param name="index">The index location to set to.</param>
         public void SetIndexedValue(object target, object value, object index) => IndexSetter.Invoke((TTarget)target, index, (TValue)value);
 
+        /// <summary>Gets a value that determines whether the custom property supports read access.</summary>
+        /// <returns>**true** if the property value can be read as a data source. **false** if the property cannot be a data source value.</returns>
         public bool CanRead => Getter != null || IndexGetter != null;
+        /// <summary>Gets a value that determines whether the custom property supports write access.</summary>
+        /// <returns>**true** if the value can be written to through a data source relationship in a two-way binding. **false** if the property cannot be written to.</returns>
         public bool CanWrite => Setter != null || IndexSetter != null;
+        /// <summary>Gets the path-relevant name of the property.</summary>
+        /// <returns>The name of the property as it would be specified in a binding expression.</returns>
         public string Name { get; }
+        /// <summary>Gets the underlying type of the custom property.</summary>
+        /// <returns>The underlying type, with relevant information as the values of the TypeName structure. TypeName provides the infrastructure such that property backing does not have to resemble common language runtime (CLR) and **System.Type** definitions.</returns>
         public Type Type => typeof(TValue);
 
+        /// <summary>
+        /// Creates an instance of <see href="DynamicCustomProperty">DynamicCustomProperty</see>.
+        /// </summary>
+        /// <param name="name">Property name.</param>
+        /// <param name="getter">Property getter delegate.</param>
+        /// <param name="setter">Property setter delegate.</param>
+        /// <param name="indexGetter">Indexer getter delegate.</param>
+        /// <param name="indexSetter">Indexer setter delegate.</param>
         public DynamicCustomProperty(string name, Func<TTarget, TValue> getter, Action<TTarget, TValue> setter = null, Func<TTarget, object, TValue> indexGetter = null, Action<TTarget, object, TValue> indexSetter = null)
         {
             Name = name;
@@ -112,41 +159,83 @@ namespace Elmish.Windows
 
 namespace Elmish.Uno
 {
+    /// <summary>
+    /// View model methods to correspond to F# module
+    /// </summary>
     [RequireQualifiedAccess, CompilationMapping(SourceConstructFlags.Module)]
     public static class ViewModel
     {
+        /// <summary>
+        /// Creates an instance of Elmish view model without dispatcher subscription.
+        /// </summary>
+        /// <typeparam name="TModel">Model type.</typeparam>
+        /// <typeparam name="TMsg">Elmish message type.</typeparam>
+        /// <param name="model">Design time model.</param>
+        /// <param name="bindings">Elmish program to run.</param>
+        /// <returns>An instance of internal Elmish view model class.</returns>
         public static object DesignInstance<TModel, TMsg>(TModel model, FSharpList<Binding<TModel, TMsg>> bindings)
         {
             var emptyDispatch = FuncConvert.FromAction((TMsg msg) => { });
             return new Elmish.Windows.ViewModel<TModel, TMsg>(model, emptyDispatch, bindings, ElmConfig.Default, "main");
         }
 
-        public static object DesignInstance<T, TModel, TMsg>(TModel model, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> program)
+        /// <summary>
+        /// Creates an instance of Elmish view model without dispatcher subscription.
+        /// and with an initial program argument.
+        /// </summary>
+        /// <typeparam name="T">Initial program argument type.</typeparam>
+        /// <typeparam name="TModel">Model type.</typeparam>
+        /// <typeparam name="TMsg">Elmish message type.</typeparam>
+        /// <param name="model">Design time model.</param>
+        /// <param name="bindings">Elmish program to run.</param>
+        /// <returns>An instance of internal Elmish view model class.</returns>
+        public static object DesignInstance<T, TModel, TMsg>(TModel model, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> bindings)
         {
             var emptyDispatch = FuncConvert.FromAction((TMsg msg) => { });
-            var mapping = FSharpFunc<TModel, FSharpFunc<TMsg, Unit>>.InvokeFast(ProgramModule.view(program), model, emptyDispatch);
+            var mapping = FSharpFunc<TModel, FSharpFunc<TMsg, Unit>>.InvokeFast(ProgramModule.view(bindings), model, emptyDispatch);
             return DesignInstance(model, mapping);
         }
 
-        public static void StartLoop<TModel, TMsg>(ElmConfig config, FrameworkElement element, Action<Program<Microsoft.FSharp.Core.Unit, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>>> programRun, Program<Unit, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> program)
+        /// <summary>
+        /// Creates an instance of Elmish view model with dispatcher subscription.
+        /// </summary>
+        /// <typeparam name="TModel">Model type.</typeparam>
+        /// <typeparam name="TMsg">Elmish message type.</typeparam>
+        /// <param name="config">Elmish config.</param>
+        /// <param name="element">UI control to set DataContext property on.</param>
+        /// <param name="bindings">Elmish bindings definitions list.</param>
+        /// <param name="program">Elmish program to run.</param>
+        public static void StartLoop<TModel, TMsg>(ElmConfig config, FrameworkElement element, Action<Program<Microsoft.FSharp.Core.Unit, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>>> bindings, Program<Unit, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> program)
         {
             FSharpRef<FSharpOption<ViewModel<TModel, TMsg>>> lastModel = new FSharpRef<FSharpOption<ViewModel<TModel, TMsg>>>(null);
             FSharpFunc<FSharpFunc<TMsg, Unit>, FSharpFunc<TMsg, Unit>> syncDispatch =
               FuncConvert.FromAction(MakeSyncDispatch<TMsg>(element));
             var setState = FuncConvert.FromAction(MakeSetState(config, element, program, lastModel));
-            programRun.Invoke(
+            bindings.Invoke(
                 ProgramModule.withSyncDispatch(syncDispatch,
                   ProgramModule.withSetState(setState, program)));
         }
 
-        public static void StartLoop<T, TModel, TMsg>(ElmConfig config, FrameworkElement element, Action<T, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>>> programRun, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> program, T arg)
+        /// <summary>
+        /// Creates an instance of Elmish view model with dispatcher subscription
+        /// and with an initial program argument.
+        /// </summary>
+        /// <typeparam name="T">Initial program argument type.</typeparam>
+        /// <typeparam name="TModel">Model type.</typeparam>
+        /// <typeparam name="TMsg">Elmish message type.</typeparam>
+        /// <param name="config">Elmish config.</param>
+        /// <param name="element">UI control to set DataContext property on.</param>
+        /// <param name="bindings">Elmish bindings definitions list.</param>
+        /// <param name="program">Elmish program to run.</param>
+        /// <param name="arg">Initial program argument.</param>
+        public static void StartLoop<T, TModel, TMsg>(ElmConfig config, FrameworkElement element, Action<T, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>>> bindings, Program<T, TModel, TMsg, FSharpList<Binding<TModel, TMsg>>> program, T arg)
         {
             FSharpRef<FSharpOption<ViewModel<TModel, TMsg>>> lastModel = new FSharpRef<FSharpOption<ViewModel<TModel, TMsg>>>(null);
             FSharpFunc<FSharpFunc<TMsg, Unit>, FSharpFunc<TMsg, Unit>> syncDispatch =
               FuncConvert.FromAction(MakeSyncDispatch<TMsg>(element));
             var setState = FuncConvert.FromAction(MakeSetState(config, element, program, lastModel));
 
-            programRun.Invoke(arg,
+            bindings.Invoke(arg,
                 ProgramModule.withSyncDispatch(syncDispatch,
                   ProgramModule.withSetState(setState, program)));
         }

@@ -130,7 +130,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <DocumentationFile>$(OutputPath)\Elmish.Uno.Mobile.XML</DocumentationFile>
+    <DocumentationFile>$(OutputPath)Elmish.Uno.Mobile.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="NavigationService.cs" />
