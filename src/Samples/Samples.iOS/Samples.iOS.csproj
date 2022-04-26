@@ -129,7 +129,7 @@
     <PackageReference Include="Uno.UI" Version="$(UnoUIVersion)" />
     <PackageReference Include="Uno.UI.RemoteControl" Version="$(UnoUIVersion)" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="$(MicrosoftExtensionsVersion)" />
-    <PackageReference Include="Uno.Extensions.Logging.OSLog " Version="1.1.*" />
+    <PackageReference Include="Uno.Extensions.Logging.OSLog " Version="1.*" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Media.xcassets\AppIcons.appiconset\Contents.json" Visible="false" />
