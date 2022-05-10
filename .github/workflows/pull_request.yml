@@ -27,13 +27,9 @@ jobs:
         vs-prerelease: true
         msbuild-architecture: x64
 
-    - name: Restore NuGet packages
-      run: nuget restore 'src\\Elmish.Uno.sln' -ConfigFile 'NuGet.Config'
-
-    - name: Build
+    - name: Build with dotnet
       run: |
-        msbuild 'src\\Elmish.Uno.sln' /t:Rebuild /p:Configuration=Release /p:Platform='Any CPU' -p:TargetFramework=net6.0-windows10.0.22000.0 -maxcpucount
-        msbuild 'src\\Elmish.Uno.sln' /t:Rebuild /p:Configuration=Release /p:Platform='Any CPU' -p:TargetFramework=net6.0 -maxcpucount
+        dotnet build 'src\\Elmish.Uno.sln' -c Release -p:Platform='Any CPU' -maxcpucount
 
     - name: Test
       run: dotnet test --no-build --configuration Release src/Elmish.Uno.Tests/Elmish.Uno.Tests.fsproj

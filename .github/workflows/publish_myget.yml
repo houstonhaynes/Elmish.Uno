@@ -19,26 +19,9 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
-    - name: Install MSBuild
-      uses: microsoft/setup-msbuild@v1.1
-      with:
-        #vs-version: '[17.0,)'
-        vs-prerelease: true
-        msbuild-architecture: x64
-
-    - name: Install NuGet 6.x
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: '6.x'
-
-    - name: Restore NuGet packages
+    - name: Build with dotnet
       run: |
-        nuget restore 'src\\Elmish.Uno.sln' -ConfigFile 'NuGet.Config'
-
-    - name: Build with MSBuild
-      run: |
-        msbuild 'src\\Elmish.Uno.sln' /t:Rebuild /p:Configuration=Release /p:Platform='Any CPU' -p:TargetFramework=net6.0-windows10.0.22000.0 -maxcpucount
-        msbuild 'src\\Elmish.Uno.sln' /t:Rebuild /p:Configuration=Release /p:Platform='Any CPU' -p:TargetFramework=net6.0 -maxcpucount
+        dotnet build 'src\\Elmish.Uno.sln' -c Release -p:Platform='Any CPU' -maxcpucount
 
     - name: Pack Elmish.Uno with NuGet
       run: |
