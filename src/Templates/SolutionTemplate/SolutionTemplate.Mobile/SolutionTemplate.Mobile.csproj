@@ -3,24 +3,25 @@
   <PropertyGroup>
     <LangVersion>$(CSharpLangVersion)</LangVersion>
     <RootNamespace>$(RootNamespace)</RootNamespace>
+
+    <!-- Application info -->
     <ApplicationTitle>SolutionTemplate</ApplicationTitle>
     <ApplicationId>com.companyname.SolutionTemplate</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
+
     <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst;net6.0-macos</TargetFrameworks>
+    <!-- Required for C# Hot Reload -->
+    <IsUnoHead>true</IsUnoHead>
     <SingleProject>true</SingleProject>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers Condition="'$(TargetFramework)' == 'net6.0-android'">android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-ios'">iossimulator-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-macos'">osx-x64</RuntimeIdentifier>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-ios'">14.2</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-android'">21.0</SupportedOSPlatformVersion>
-    <InvariantGlobalization Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">true</InvariantGlobalization>
-    <!-- Debugger workaround https://github.com/dotnet/maui-samples/blob/8aa6b8780b12e97b157514c3bdc54bb4a13001cd/HelloMacCatalyst/HelloMacCatalyst.csproj#L7 -->
-    <!-- <MtouchExtraArgs Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">$(MtouchExtraArgs) -setenv:MONO_THREADS_SUSPEND=preemptive</MtouchExtraArgs> -->
-    <!-- Required for C# Hot Reload -->
-    <IsUnoHead>true</IsUnoHead>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <ProvisioningType>manual</ProvisioningType>
     <!--<RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <RunAnalyzers>false</RunAnalyzers>-->
@@ -43,7 +44,6 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Uno.UI.MSAL" />
     <PackageReference Include="Uno.UI.RemoteControl" Condition="'$(Configuration)'=='Debug'" />
     <PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" />
   </ItemGroup>
@@ -60,9 +60,9 @@
     <PackageReference Include="Uno.Extensions.Logging.OSLog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="iOS/Main.iOS.cs" />
-    <None Include="MacCatalyst/Main.MacCatalyst.cs" />
-    <None Include="MacOS/Main.MacOS.cs" />
+    <None Include="iOS\Main.iOS.cs" />
+    <None Include="MacCatalyst\Main.MacCatalyst.cs" />
+    <None Include="MacOS\Main.MacOS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionTemplate\SolutionTemplate.fsproj" />
