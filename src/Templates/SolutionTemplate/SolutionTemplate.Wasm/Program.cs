@@ -1,18 +1,16 @@
-using System;
-using Windows.UI.Xaml;
+﻿namespace SolutionTemplate;
 
-namespace SolutionTemplate.Wasm
+#pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable RCS1163 // Unused parameter.
+
+public partial class App
 {
-    public class Program
+    private static App app;
+
+    private static int Main(string[] args)
     {
-        private static App app;
+        global::Microsoft.UI.Xaml.Application.Start(_ => app = new App());
 
-        private static int Main(string[] args)
-        {
-            var callback = new ApplicationInitializationCallback(_ => app = new App());
-            Application.Start(callback);
-
-            return 0;
-        }
+        return 0;
     }
 }

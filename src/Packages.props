@@ -3,16 +3,16 @@
   <PropertyGroup>
     <MicrosoftExtensionsVersion>6.0.*</MicrosoftExtensionsVersion>
     <ToolkitVersion>7.1.*</ToolkitVersion>
-    <UnoWinUIVersion>4.2.*</UnoWinUIVersion>
+    <UnoWinUIVersion>4.4.*</UnoWinUIVersion>
   </PropertyGroup>
   <ItemGroup Label="Microsoft">
     <PackageReference Update="CommunityToolkit.WinUI.UI" Version="$(ToolkitVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging" Version="$(MicrosoftExtensionsVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging.Console" Version="$(MicrosoftExtensionsVersion)" />
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.*" />
-    <PackageReference Update="Microsoft.WindowsAppSDK" Version="1.0.*" />
+    <PackageReference Update="Microsoft.WindowsAppSDK" Version="1.1.*" />
     <PackageReference Update="Microsoft.Windows.Compatibility" Version="6.0.0" />
-    <PackageReference Update="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
+    <PackageReference Update="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.*" />
     <PackageReference Update="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.*" />
   </ItemGroup>
   <ItemGroup Label="Uno">
@@ -33,7 +33,7 @@
   <ItemGroup Label="Xamarin">
     <PackageReference Update="Xamarin.AndroidX.Activity" Version="1.4.*" />
     <PackageReference Update="Xamarin.AndroidX.AppCompat" Version="1.4.*" />
-    <PackageReference Update="Xamarin.AndroidX.Core" Version="1.7.*" />
+    <PackageReference Update="Xamarin.AndroidX.Core" Version="1.8.*" />
     <PackageReference Update="Xamarin.AndroidX.Fragment" Version="1.4.*" />
     <PackageReference Update="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.*" />
     <PackageReference Update="Xamarin.AndroidX.RecyclerView" Version="1.2.*" />

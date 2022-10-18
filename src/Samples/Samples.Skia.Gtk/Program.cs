@@ -1,10 +1,10 @@
-﻿namespace Elmish.Uno.Samples.Skia.Gtk;
+﻿namespace Elmish.Uno.Samples;
 
 using System;
-
 using GLib;
+using global::Uno.UI.Runtime.Skia;
 
-internal static class Program
+public partial class App
 {
     private static void Main(string[] args)
     {

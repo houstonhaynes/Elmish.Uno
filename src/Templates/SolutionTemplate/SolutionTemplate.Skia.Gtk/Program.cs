@@ -1,22 +1,23 @@
+﻿namespace SolutionTemplate;
 using System;
+
 using GLib;
+
 using Uno.UI.Runtime.Skia;
 
-namespace SolutionTemplate.Skia.Gtk
+
+public partial class App
 {
-    class Program
+    private static void Main(string[] args)
     {
-        static void Main(string[] args)
+        ExceptionManager.UnhandledException += delegate (UnhandledExceptionArgs expArgs)
         {
-            ExceptionManager.UnhandledException += delegate (UnhandledExceptionArgs expArgs)
-            {
-                Console.WriteLine("GLIB UNHANDLED EXCEPTION" + expArgs.ExceptionObject.ToString());
-                expArgs.ExitApplication = true;
-            };
+            Console.WriteLine("GLIB UNHANDLED EXCEPTION" + expArgs.ExceptionObject.ToString());
+            expArgs.ExitApplication = true;
+        };
 
-            var host = new GtkHost(() => new App(), args);
+        var host = new GtkHost(() => new App(), args);
 
-            host.Run();
-        }
+        host.Run();
     }
 }

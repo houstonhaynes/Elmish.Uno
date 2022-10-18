@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows10.0.22000.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0-windows10.0.22621.0;net6.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-windows10'))">
@@ -28,16 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Elmish" Version="3.1.0" />
-    <PackageReference Include="FSharp.Control.FusionTasks" Version="2.5.*" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.*" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
-    <PackageReference Include="Uno.Core" Version="4.0.*" />
-    <PackageReference Include="Uno.WinUI" Version="4.1.*" Condition="$(TargetFramework.Equals('net6.0'))" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.*" />
+    <PackageReference Include="Elmish" />
+    <PackageReference Include="FSharp.Control.FusionTasks" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />
+    <PackageReference Include="Uno.Core" />
+    <PackageReference Include="Uno.WinUI" Condition="$(TargetFramework.Equals('net6.0'))" />
   </ItemGroup>
 
   <Target Name="XamlPreCompile" Condition="$(TargetFramework.StartsWith('net6.0-windows10'))" />

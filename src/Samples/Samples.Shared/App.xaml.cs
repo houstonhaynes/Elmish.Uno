@@ -1,5 +1,7 @@
 ﻿namespace Elmish.Uno.Samples;
 
+using System.Diagnostics.Contracts;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 
@@ -35,6 +37,7 @@ public sealed partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
+        Contract.Assume(args != null);
 #if DEBUG
         if (System.Diagnostics.Debugger.IsAttached)
         {
